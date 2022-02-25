@@ -25,100 +25,13 @@ extension LinearGradient {
 
 
 
-struct SimpleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-            .padding(30)
-            .contentShape(Circle())
-            .background(
-                Group {
-                    if configuration.isPressed {
-                        Circle()
-                            .fill(Color.offWhite)
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.gray, lineWidth: 4)
-                                    .blur(radius: 4)
-                                    .offset(x: 2, y: 2)
-                                    .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
-                            )
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white, lineWidth: 8)
-                                    .blur(radius: 4)
-                                    .offset(x: -2, y: -2)
-                                    .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
-                            )
-                    } else {
-                        Circle()
-                            .fill(Color.offWhite)
-                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-                            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
-                    }
-                }
-            )
-    }
-}
-
-
-
-struct ColorfulBackground<S: Shape>: View {
-    var isHighlighted: Bool
-    var shape: S
-
-    var body: some View {
-        ZStack {
-            if isHighlighted {
-                shape
-                    .fill(LinearGradient(Color.lightEnd, Color.lightStart))
-                    .overlay(shape.stroke(LinearGradient(Color.lightStart, Color.lightEnd), lineWidth: 4))
-                    .shadow(color: Color.darkStart, radius: 10, x: 5, y: 5)
-                    .shadow(color: Color.darkEnd, radius: 10, x: -5, y: -5)
-            } else {
-                shape
-                    .fill(LinearGradient(Color.darkStart, Color.darkEnd))
-                    .overlay(shape.stroke(LinearGradient(Color.lightStart, Color.lightEnd), lineWidth: 4))
-                    .shadow(color: Color.darkStart, radius: 10, x: -10, y: -10)
-                    .shadow(color: Color.darkEnd, radius: 10, x: 10, y: 10)
-            }
-        }
-    }
-}
-
-
-struct ColorfulButtonStyle: ButtonStyle {
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-            .padding(30)
-            .contentShape(Circle())
-            .background(
-                ColorfulBackground(isHighlighted: configuration.isPressed, shape: Circle())
-            )
-            .animation(nil)
-    }
-}
-
-struct ColorfulToggleStyle: ToggleStyle {
-    func makeBody(configuration: Self.Configuration) -> some View {
-        Button(action: {
-            configuration.isOn.toggle()
-        }) {
-            configuration.label
-                .padding(30)
-                .contentShape(Circle())
-        }
-        .background(
-            ColorfulBackground(isHighlighted: configuration.isOn, shape: Circle())
-        )
-    }
-}
-
 struct Keyboard: View {
     @State private var isToggled = false
     @Binding var word: [[Character]]
     @State var curIndex:Int
     @Binding var curLine:Int
     @Binding var going:Bool
+    @Binding var colors:[String: Color]
     
     var body: some View {
         GeometryReader { geometry in
@@ -140,7 +53,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["Q"] ?? Color(.systemGray))
                             Text("Q")
                                 .foregroundColor(.white)
                         }
@@ -160,6 +73,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
+                                .foregroundColor(colors["W"] ?? Color(.systemGray))
                             .foregroundColor(Color(.systemGray))
                             Text("W")
                                 .foregroundColor(.white)
@@ -179,7 +93,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["E"] ?? Color(.systemGray))
                             Text("E")
                                 .foregroundColor(.white)
                         }
@@ -198,7 +112,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["R"] ?? Color(.systemGray))
                             Text("R")
                                 .foregroundColor(.white)
                         }
@@ -217,7 +131,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["T"] ?? Color(.systemGray))
                             Text("T")
                                 .foregroundColor(.white)
                         }
@@ -236,7 +150,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["Y"] ?? Color(.systemGray))
                             Text("Y")
                                 .foregroundColor(.white)
                         }
@@ -255,7 +169,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["U"] ?? Color(.systemGray))
                             Text("U")
                                 .foregroundColor(.white)
                         }
@@ -274,7 +188,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["I"] ?? Color(.systemGray))
                             Text("I")
                                 .foregroundColor(.white)
                         }
@@ -293,7 +207,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["O"] ?? Color(.systemGray))
                             Text("O")
                                 .foregroundColor(.white)
                         }
@@ -312,7 +226,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["P"] ?? Color(.systemGray))
                             Text("P")
                                 .foregroundColor(.white)
                         }
@@ -335,7 +249,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["A"] ?? Color(.systemGray))
                             Text("A")
                                 .foregroundColor(.white)
                         }
@@ -354,7 +268,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["S"] ?? Color(.systemGray))
                             Text("S")
                                 .foregroundColor(.white)
                         }
@@ -373,7 +287,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["D"] ?? Color(.systemGray))
                             Text("D")
                                 .foregroundColor(.white)
                         }
@@ -392,7 +306,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["F"] ?? Color(.systemGray))
                             Text("F")
                                 .foregroundColor(.white)
                         }
@@ -411,7 +325,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["G"] ?? Color(.systemGray))
                             Text("G")
                                 .foregroundColor(.white)
                         }
@@ -430,7 +344,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                                .foregroundColor(colors["H"] ?? Color(.systemGray))
                             Text("H")
                                 .foregroundColor(.white)
                         }
@@ -449,7 +363,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["J"] ?? Color(.systemGray))
                             Text("J")
                                 .foregroundColor(.white)
                         }
@@ -468,7 +382,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["K"] ?? Color(.systemGray))
                             Text("K")
                                 .foregroundColor(.white)
                         }
@@ -487,7 +401,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["L"] ?? Color(.systemGray))
                             Text("L")
                                 .foregroundColor(.white)
                         }
@@ -506,7 +420,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["Ñ"] ?? Color(.systemGray))
                             Text("Ñ")
                                 .foregroundColor(.white)
                         }
@@ -533,7 +447,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["Z"] ?? Color(.systemGray))
                             Text("Z").foregroundColor(.white)
                         }
                             
@@ -551,7 +465,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["X"] ?? Color(.systemGray))
                             Text("X")
                                 .foregroundColor(.white)
                         }
@@ -570,7 +484,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["C"] ?? Color(.systemGray))
                             Text("C")
                                 .foregroundColor(.white)
                         }
@@ -589,7 +503,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["V"] ?? Color(.systemGray))
                             Text("V")
                                 .foregroundColor(.white)
                         }
@@ -608,7 +522,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["B"] ?? Color(.systemGray))
                             Text("B")
                                 .foregroundColor(.white)
                         }
@@ -627,7 +541,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["N"] ?? Color(.systemGray))
                             Text("N")
                                 .foregroundColor(.white)
                         }
@@ -646,7 +560,7 @@ struct Keyboard: View {
                     }) {
                         ZStack{
                             RoundedRectangle(cornerRadius: 4)
-                            .foregroundColor(Color(.systemGray))
+                            .foregroundColor(colors["M"] ?? Color(.systemGray))
                             Text("M")
                                 .foregroundColor(.white)
                         }

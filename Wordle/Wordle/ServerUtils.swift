@@ -7,6 +7,7 @@
 
 
 import Foundation
+import SwiftUI
 
 struct wordSet: Decodable{
     let words:[lilWord]
@@ -55,7 +56,7 @@ class ServerUtils {
                         let wordleSet = try decoder.decode(wordSet.self, from: Data(dataString.utf8))
                         
                         returnWith(wordleSet.words[0], true)
-                        //TODO
+                        #warning("TODO Adrian")
                         //Ok so this is where you need to do your work. Right now it decodes a json object into the structs at the beginning of this file. Also, right now i am just returning the first word of the wordset as opposed to the word with the date corresponding to today. So you gotta do that lol
                     }
                         
@@ -73,5 +74,34 @@ class ServerUtils {
             
         }
     }
+    
+    
+    /*
+     This function takes an array of characters (pretty much a string but its easier for me =D) and return which letters are in the correct spot. Return Color("Verde") if its in the correct spot, Color("Amarillo") if the letter is in the word, and Color("Gris") if its completely wrong. 
+     */
+    static func crazyShit(word:[Character])->[Color]{
+        #warning("TODO Adrian")
+        
+        //This is just a placeholder
+        let returner:[Color] = [Color("Verde"),Color("Gris"),Color("Gris"),Color("Amarillo"),Color("Verde")]
+        
+        
+        return returner
+        
+    }
+    
+    /*
+     Same type of thing. takes an array of chars and you just need to return if its a word. ideally check for both spanish and english. I'd start with UITextChecker and see what you can work with that.
+     
+        This might be able to help:
+        https://developer.apple.com/forums/thread/110326
+     */
+    static func realWord(word:[Character])->Bool {
+        //TODO
+        #warning("TODO Adrian")
+        return true
+    }
+    
+    
 }
 
