@@ -32,6 +32,7 @@ struct Keyboard: View {
     @Binding var curLine:Int
     @Binding var going:Bool
     @Binding var colors:[String: Color]
+    @ObservedObject var settings = Settings()
     
     var body: some View {
         GeometryReader { geometry in
@@ -45,6 +46,7 @@ struct Keyboard: View {
                         if(going){
                             if (word[curLine].count < 5) {
                                 word[curLine].append("Q")
+                                
                             }
                         }
                         

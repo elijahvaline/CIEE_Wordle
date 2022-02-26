@@ -57,7 +57,7 @@ class ServerUtils {
                         
                         returnWith(wordleSet.words[0], true)
                         #warning("TODO Adrian")
-                        //Ok so this is where you need to do your work. Right now it decodes a json object into the structs at the beginning of this file. Also, right now i am just returning the first word of the wordset as opposed to the word with the date corresponding to today. So you gotta do that lol
+                        //Ok so this is where you need to do your work. Right now it decodes a json object into the structs at the beginning of this file. Also, right now i am just returning the first word of the wordset as opposed to the word with the date corresponding to today. So you gotta do that lol. Also you may wanna add like some id or something or a counter from the first date in the list. that way we know which "number" wordle today is
                     }
                         
                     catch let jsonError {

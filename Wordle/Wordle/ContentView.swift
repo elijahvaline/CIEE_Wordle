@@ -25,6 +25,7 @@ struct ContentView: View {
     @State var todaysWord:String = "Loading Word"
     @State var todaysDate:String = "Loading Date"
     @State var mWord: [[Character]] = [[],[],[],[],[],[]]
+    @ObservedObject private var settings = Settings()
     @State var won = false
     @State var title = "CIEE WORDLE"
     @State var wWord:String = "E"
@@ -105,6 +106,8 @@ struct ContentView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
 //            lost()
             enabled = true
+            settings.setColors(setColors: colors)
+            settings.setRow(row: mCurLine)
             keyColors(stat: status)
             if (mCurLine > 5){
                 lost()
@@ -214,10 +217,16 @@ struct ContentView: View {
                             .foregroundColor(Color.white)
                             .scaleEffect(finalScale)
                         Spacer()
-                        Image(systemName: "gamecontroller")
-                            .foregroundColor(Color(.systemGray3))
-                            .padding(.trailing, 20)
-                            .font(.title)
+                        Button(action: {
+                            settings.resetDefaults()
+                        }) {
+                            Image(systemName: "gamecontroller")
+                                .foregroundColor(Color(.systemGray3))
+                                .padding(.trailing, 20)
+                                .font(.title)
+                        }
+                        
+                        
                             
                     }
                     
@@ -234,16 +243,15 @@ struct ContentView: View {
                     
                     Button(action: {
                         
-                        if(enabled){
+                        if(enabled && ServerUtils.realWord(word: mWord[mCurLine])){
                             if (mWord[mCurLine].count == 5){
                                 let generator = UINotificationFeedbackGenerator()
                                 generator.notificationOccurred(.success)
                                 print("Success")
+                                settings.changey(words: mWord)
                                 mCurLine += 1
-                                
-                                
-                                
                                 animateSquares(line: mCurLine)
+                                
                             }
                             else{
                                 let generator = UINotificationFeedbackGenerator()
@@ -294,6 +302,9 @@ struct ContentView: View {
         
         
         .onAppear(){
+            mWord = settings.getWords()
+            colors = settings.getColors()
+            mCurLine = settings.getRow()
             reload()
         }
     }
