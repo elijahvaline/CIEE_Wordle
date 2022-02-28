@@ -26,12 +26,34 @@ class Settings: ObservableObject {
         }
     }
     
+    @Published var letterColors:[String: Int]{
+        didSet{
+            UserDefaults.standard.set(letterColors, forKey: "letter")
+        }
+    }
+    
+    @Published var date:String {
+        didSet{
+            UserDefaults.standard.set(date, forKey: "date")
+        }
+    }
+    
     
     init() {
        
         self.mWord = UserDefaults.standard.object(forKey: "words") as? [String] ?? []
         self.curLine = UserDefaults.standard.object(forKey: "line") as? Int ?? 1
         self.Colors = UserDefaults.standard.object(forKey: "color") as? [[Int]] ?? [[],[],[],[],[],[]]
+        self.letterColors = UserDefaults.standard.object(forKey: "letter") as? [String: Int] ?? [:]
+        self.date = UserDefaults.standard.object(forKey: "date") as? String ?? "0/0/0000"
+    }
+    
+    func dater(){
+        let datey = Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        let result = formatter.string(from: datey)
+        date = result
     }
 
     func changey(words:[[Character]]){
@@ -72,6 +94,7 @@ class Settings: ObservableObject {
         mWord = []
         Colors = [[],[],[],[],[],[]]
         curLine = 0
+        letterColors = [:]
     }
     
     func setColors(setColors:[[Color]]){
@@ -149,6 +172,80 @@ class Settings: ObservableObject {
     }
     func getRow()->Int{
         return curLine
+    }
+    
+    func setKeyboard(colors:[String: Color]){
+        
+        var savers:[String: Int] = [:]
+        
+        
+        for (letter, color) in colors {
+            
+            switch color {
+                
+            case Color("Verde"):
+                savers[letter] = 3
+                //3
+                break;
+            case Color("Gris"):
+                savers[letter] = 1
+                //1
+                break;
+            case Color("Amarillo"):
+                savers[letter] = 2
+                //2
+                break;
+            default:
+                print("Default")
+                
+            }
+            
+        }
+        
+        letterColors = savers
+    }
+    
+    func getkeyboard()->[String: Color]{
+        
+        var returner:[String : Color] = [:]
+        
+        for (letter, color) in letterColors {
+            
+            switch color {
+                
+            case 1:
+                
+                returner[letter] = Color("Gris")
+                
+                break;
+            case 2:
+                returner[letter] = Color("Amarillo")
+                break;
+            case 3:
+                returner[letter] = Color("Verde")
+                break;
+            default:
+                print("Default")
+            }
+        }
+        return returner
+        
+    }
+    
+    func refresh(){
+        
+        let datey = Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        let result = formatter.string(from: datey)
+        
+        if (result != date){
+            
+            resetDefaults()
+            date = result
+        }
+        
+        
     }
     
 }

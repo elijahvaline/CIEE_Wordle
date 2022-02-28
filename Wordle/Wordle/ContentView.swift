@@ -21,7 +21,7 @@ extension View {
 
 struct ContentView: View {
     
-    @State var letterColors: [String: Color] = ["A": Color(.systemGray)]
+    @State var letterColors: [String: Color] = [:]
     @State var todaysWord:String = "Loading Word"
     @State var todaysDate:String = "Loading Date"
     @State var mWord: [[Character]] = [[],[],[],[],[],[]]
@@ -109,6 +109,7 @@ struct ContentView: View {
             settings.setColors(setColors: colors)
             settings.setRow(row: mCurLine)
             keyColors(stat: status)
+            settings.setKeyboard(colors: letterColors)
             if (mCurLine > 5){
                 lost()
             }
@@ -205,11 +206,14 @@ struct ContentView: View {
                    
 //                    Text(mWord).font(.headline).foregroundColor(.white)
                     HStack{
-                        Image(systemName: "gamecontroller")
-                            .foregroundColor(Color(.systemGray3))
-                            .opacity(0.0)
-                            .padding(.leading, 20.0)
-                            .font(.title)
+                        Button(action: {
+                            settings.resetDefaults()
+                        }) {
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(Color(.systemGray3))
+                                .padding(.leading, 20)
+                                .font(.title)
+                        }
                         Spacer()
                         Text(title)
                             .font(.title)
@@ -218,16 +222,18 @@ struct ContentView: View {
                             .scaleEffect(finalScale)
                         Spacer()
                         Button(action: {
-                            settings.resetDefaults()
+                            
+                            
+                            //Nav to stats screen
+                            
+                            
+                            
                         }) {
                             Image(systemName: "gamecontroller")
                                 .foregroundColor(Color(.systemGray3))
                                 .padding(.trailing, 20)
                                 .font(.title)
                         }
-                        
-                        
-                            
                     }
                     
                     
@@ -236,9 +242,7 @@ struct ContentView: View {
                     
                     Words(word: $mWord, curIndex: mCurIndex, curLine: $mCurLine, scale: $scaled, colors: $colors)
                         .padding(.vertical, 10)
-//                    Text(todaysWord).foregroundColor(.white)
-//                    Text(todaysDate).foregroundColor(.white)
-//
+                    
                     Divider().foregroundColor(Color("BackgroundBlack"))
                     
                     Button(action: {
@@ -302,9 +306,12 @@ struct ContentView: View {
         
         
         .onAppear(){
+            
+            settings.refresh()
             mWord = settings.getWords()
             colors = settings.getColors()
             mCurLine = settings.getRow()
+            letterColors = settings.getkeyboard()
             reload()
         }
     }
