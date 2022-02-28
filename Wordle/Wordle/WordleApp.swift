@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct WordleApp: App {
+    @State var hah = 0.0
     var body: some Scene {
         WindowGroup {
             ContentView()
+            
         }
     }
 }

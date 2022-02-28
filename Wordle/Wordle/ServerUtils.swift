@@ -57,7 +57,13 @@ class ServerUtils {
                         
                         returnWith(wordleSet.words[0], true)
                         #warning("TODO Adrian")
+                        
+                        
                         //Ok so this is where you need to do your work. Right now it decodes a json object into the structs at the beginning of this file. Also, right now i am just returning the first word of the wordset as opposed to the word with the date corresponding to today. So you gotta do that lol. Also you may wanna add like some id or something or a counter from the first date in the list. that way we know which "number" wordle today is
+                        
+                        //the array words is the set of all the words in the list. right now it is returning the first word in the array at this line 59. Its kinda funky since its an asynchronous function so its not as straight forward as a normal func, but it pretty similar. at 59 its returning the first word as well as boolean for whether it succeeded (talking about the call to the server, thats why its a false in the other cases meaning it either failed to decode or failed to retrieve the data.
+                        
+                        
                     }
                         
                     catch let jsonError {
@@ -82,7 +88,7 @@ class ServerUtils {
     static func crazyShit(word:[Character])->[Color]{
         #warning("TODO Adrian")
         
-        //This is just a placeholder
+        //This is just a placeholder, it corresponds to the letter. So its a green grey grey yellow green word. if you run it in the app youll see what i mean
         let returner:[Color] = [Color("Verde"),Color("Gris"),Color("Gris"),Color("Amarillo"),Color("Verde")]
         
         

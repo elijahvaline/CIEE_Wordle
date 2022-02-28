@@ -596,20 +596,6 @@ struct Keyboard: View {
                 
             }
             
-            
-       
-
-
-            
-                
-                
-                
-                
-                
-                
-        
-            
-            
         }
        
     }

@@ -19,6 +19,19 @@ extension View {
 
 }
 
+extension View {
+
+    @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
+        if hidden {
+            if !remove {
+                self.hidden()
+            }
+        } else {
+            self
+        }
+    }
+}
+
 struct ContentView: View {
     
     @State var letterColors: [String: Color] = [:]
@@ -29,16 +42,41 @@ struct ContentView: View {
     @State var won = false
     @State var title = "CIEE WORDLE"
     @State var wWord:String = "E"
+    @State var loading = false
     @State var mCurIndex:Int = 0
     @State var mCurLine:Int = 0
     @State var running:Bool = false
     @State var degs:Double = 0.0
     @State var enabled:Bool = true
     @State var finalScale = 1.0
+    @State var loadingRotation = 0.0
+    @State var loadingScale = 1.0
+    @State var loadingOp = 1.0
     @State var scaled:[[Double]] = [[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1], [1,1,1,1,1]]
     @State var colors:[[Color]] = [[Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack")], [Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack")], [Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack")], [Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack")], [Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack")], [Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack"), Color("BackgroundBlack")]]
     
 
+    fileprivate func animateLoading(){
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+       withAnimation(.easeInOut(duration: 0.2)){
+            loadingScale = 0.9
+        }
+        }
+        
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            
+            withAnimation(.easeIn(duration: 0.2)) {
+                loadingScale = 37.0
+                loadingOp = 0.0
+            }
+        }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            loading = true
+        }
+        
+    }
     
     fileprivate func animateSquares(line:Int) {
         enabled = false
@@ -299,6 +337,10 @@ struct ContentView: View {
                         
                 }
                 
+                Loading(scale: $loadingScale, rotation: $loadingRotation)
+                    .isHidden(loading)
+                    .opacity(loadingOp)
+                
             }.rotationEffect(.degrees(degs))
                 .background(Color("BackgroundBlack"))
                 
@@ -307,6 +349,7 @@ struct ContentView: View {
         
         .onAppear(){
             
+//            animateLoading()
             settings.refresh()
             mWord = settings.getWords()
             colors = settings.getColors()
@@ -326,7 +369,8 @@ struct ContentView: View {
                 print("OH NO IT FAILED")
                 return;
             }
-            
+            print("Found the word")
+            animateLoading()
             todaysWord = response!.word
             todaysDate = response!.date
             
